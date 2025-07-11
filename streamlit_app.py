@@ -19,8 +19,8 @@ session = cnx.session()
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
 
 # st.dataframe(data=my_dataframe, use_container_width=True)
-# st.stop
-pd_df= my_dataframe.to_pandas()
+st.stop
+# pd_df= my_dataframe.to_pandas()
 # st.dataframe(pd_df)
 # st.stop()
 
@@ -36,17 +36,23 @@ ingredients_list = st.multiselect(
 )
 
 if ingredients_list:
-    ingredients_string = ''
+  ingredients_string = ''
+  
+  for each_fruit in ingredients_list:
+    ingredients_string += each_fruit + ' '
 
-    for each_fruit in ingredients_list:
-        ingredients_string += each_fruit + ' '
-
-        search_on = pd_df.loc[pd_df['FRUIT_NAME']== each_fruit,'SEARCH_ON'].iloc(0)
+     # search_on = pd_df.loc[pd_df['FRUIT_NAME']== each_fruit,'SEARCH_ON'].iloc(0)
         # st.write('The search value for ', each_fruit,'search_on','.')
 
-        st.subheader(each_fruit + 'Nutrition Information')
-        smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + each_fruit )
-        sf_df = st.dataframe(data=smoothiefroot_response.json(),use_container_width=True)
+    st.subheader(each_fruit + 'Nutrition Information')
+    smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + each_fruit )
+    sf_df = st.dataframe(data=smoothiefroot_response.json(),use_container_width=True)
+
+
+        # search_on = pd_df.loc[pd_df['FRUIT_NAME']== each_fruit,'SEARCH_ON'].iloc(0)
+        # st.write('The search value for ', each_fruit,'search_on','.')
+
+        
     
     my_insert_stmt = """ insert into smoothies.public.orders(ingredients,name_on_order)
             values ('""" + ingredients_string + """','"""+name_on_order+"""')"""
