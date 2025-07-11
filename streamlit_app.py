@@ -12,17 +12,17 @@ st.write(
 
 name_on_order = st.text_input("Name on Smoothie")
 st.write("The Name on your Smoothie will be : ", name_on_order)
-cnx = st.connection("snowflake")
+cnx = st.connection('snowflake')
 session = cnx.session()
 # session = get_active_session()
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('fruit_name'),(col('SEARCH_ON'))
 # st.dataframe(data=my_dataframe, use_container_width=True)
 # st.stop
 pd_df= my_dataframe.to_pandas()
-# st.dataframe(pd_df)
-# st.stop()
+st.dataframe(pd_df)
+st.stop()
 
-my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
+# my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
 # st.dataframe(data=my_dataframe, use_container_width=True)
 # convert the snowpark dataframe to a pandas dataframe
 
@@ -39,7 +39,7 @@ if ingredients_list:
     for each_fruit in ingredients_list:
         ingredients_string += each_fruit + ' '
 
-        search_on = pd_df.loc[pd_df['FRUIT_NAME']==each_fruit,'SEARCH_ON'].iloc(0)
+        search_on = pd_df.loc[pd_df['FRUIT_NAME']== each_fruit,'SEARCH_ON'].iloc(0)
         # st.write('The search value for ', each_fruit,'search_on','.')
 
         st.subheader(each_fruit + 'Nutrition Information')
